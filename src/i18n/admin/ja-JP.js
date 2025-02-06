@@ -90,7 +90,7 @@ export const m = {
   Hint: 'ヒント',
   Source: '出典',
   Edit_Problem: '問題編集',
-  Add_Problme: '問題追加',
+  Add_Problem: '問題追加',
   High: '高',
   Mid: '中',
   Low: '低',
