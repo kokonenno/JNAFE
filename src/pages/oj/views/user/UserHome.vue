@@ -1,18 +1,21 @@
 <template>
   <div class="container">
-    <div class="avatar-container">
-      <img class="avatar" :src="profile.avatar"/>
-    </div>
-    <Card :padding="100">
-      <div v-if="profile.user">
-        <p style="margin-top: -10px">
-          <span v-if="profile.user" class="emphasis">{{profile.user.username}}</span>
-          <span v-if="profile.school">@{{profile.school}}</span>
+    <Card class="profile-card">
+      <!-- 프로필 헤더 -->
+      <div class="profile-header">
+        <div class="avatar-container">
+          <img class="avatar" :src="profile.avatar"/>
+        </div>
+      </div>
+
+      <!-- 프로필 본문 -->
+      <div class="profile-content">
+        <p class="user-info">
+          <span class="emphasis">{{ profile.user.username }}</span>
+          <span v-if="profile.school">@{{ profile.school }}</span>
         </p>
-        <p v-if="profile.mood">
-          {{profile.mood}}
-        </p>
-        <hr id="split"/>
+        <p v-if="profile.mood">{{ profile.mood }}</p>
+        <hr class="split"/>
 
         <div class="flex-container">
           <div class="left">
@@ -28,33 +31,21 @@
             <p class="emphasis">{{profile.total_score}}</p>
           </div>
         </div>
+
         <div id="problems">
-          <div v-if="problems.length">{{$t('m.List_Solved_Problems')}}
-            <Poptip v-if="refreshVisible" trigger="hover" placement="right-start">
-              <Icon type="ios-help-outline"></Icon>
-              <div slot="content">
-                <p>If you find the following problem id does not exist,<br> try to click the button.</p>
-                <Button type="info" @click="freshProblemDisplayID">regenerate</Button>
-              </div>
-            </Poptip>
-          </div>
+          <p v-if="problems.length">{{$t('m.List_Solved_Problems')}}</p>
           <p v-else>{{$t('m.UserHomeIntro')}}</p>
           <div class="btns">
-            <div class="problem-btn" v-for="problemID of problems" :key="problemID">
-              <Button type="ghost" @click="goProblem(problemID)">{{problemID}}</Button>
-            </div>
+            <Button v-for="problemID in problems" :key="problemID" type="ghost" @click="goProblem(problemID)">
+              {{ problemID }}
+            </Button>
           </div>
         </div>
+
         <div id="icons">
-          <a :href="profile.github">
-            <Icon type="social-github-outline" size="30"></Icon>
-          </a>
-          <a :href="'mailto:'+ profile.user.email">
-            <Icon class="icon" type="ios-email-outline" size="30"></Icon>
-          </a>
-          <a :href="profile.blog">
-            <Icon class="icon" type="ios-world-outline" size="30"></Icon>
-          </a>
+          <a :href="profile.github"><Icon type="social-github-outline" size="30"/></a>
+          <a :href="'mailto:'+ profile.user.email"><Icon class="icon" type="ios-email-outline" size="30"/></a>
+          <a :href="profile.blog"><Icon class="icon" type="ios-world-outline" size="30"/></a>
         </div>
       </div>
     </Card>
@@ -131,72 +122,95 @@
 </script>
 
 <style lang="less" scoped>
-  .container {
-    position: relative;
-    width: 75%;
-    margin: 170px auto;
-    text-align: center;
-    p {
-      margin-top: 8px;
-      margin-bottom: 8px;
-    }
-    .avatar-container {
-      position: absolute;
-      left: 50%;
-      transform: translate(-50%);
-      z-index: 1;
-      top: -90px;
-      .avatar {
-        width: 140px;
-        height: 140px;
-        border-radius: 50%;
-        box-shadow: 0 1px 1px 0;
-      }
-    }
-    .emphasis {
-      font-size: 20px;
-      font-weight: 600;
-    }
-    #split {
-      margin: 20px auto;
-      width: 90%;
-    }
-    .flex-container {
-      margin-top: 30px;
-      padding: auto 20px;
-      .left {
-        flex: 1 1;
-      }
-      .middle {
-        flex: 1 1;
-        border-left: 1px solid #999;
-        border-right: 1px solid #999;
-      }
-      .right {
-        flex: 1 1;
-      }
-    }
-    #problems {
-      margin-top: 40px;
-      padding-left: 30px;
-      padding-right: 30px;
-      font-size: 18px;
-      .btns {
-        margin-top: 15px;
-        .problem-btn {
-          display: inline-block;
-          margin: 5px;
-        }
-      }
-    }
-    #icons {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translate(-50%);
-      .icon {
-        padding-left: 20px;
-      }
-    }
-  }
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 50px;
+}
+
+/* 🌟 Card 스타일 개선 */
+.profile-card {
+  position: relative;
+  width: 60%;
+  padding: 80px 40px 50px; /* 프로필 사진이 자연스럽게 위치하도록 조정 */
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* 📌 프로필 사진이 `Card` 내부에서 상단에 걸쳐 배치되도록 설정 */
+.profile-header {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 📌 프로필 사진이 카드 안쪽에 적절히 배치되도록 조정 */
+.avatar-container {
+  position: absolute;
+  top: -85px; /* 기존 -70px에서 -85px로 올려서 유저명과 간격 확보 */
+  width: 120px;
+  height: 120px;
+  background: white;
+  border-radius: 50%;
+  padding: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* 프로필 사진 크기 설정 */
+.avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+/* 📌 프로필 본문과의 간격 조정 */
+.profile-content {
+  margin-top: 50px;
+}
+
+/* 📌 유저명이 프로필 사진과 겹치지 않도록 추가 조정 */
+.user-info {
+  margin-top: 20px; /* 기존보다 더 넉넉한 여백 추가 */
+}
+
+/* 📌 구분선 스타일 */
+.split {
+  margin: 20px auto;
+  width: 90%;
+}
+
+/* 📌 통계 정보 정렬 */
+.flex-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+}
+
+#problems {
+  margin-top: 40px;
+  font-size: 18px;
+}
+
+.btns {
+  margin-top: 15px;
+}
+
+/* 📌 아이콘 배치 */
+#icons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.icon {
+  padding-left: 10px;
+}
 </style>
